@@ -31,7 +31,7 @@ Na deze bewerking ligt de scandering nog steeds niet altijd vast. Uit de restere
 python scansion.py -f <filenaam> [-m <patroon>] [-e <regel element>] [-t] [-d]
 python scansion.py -h
 
-Het bestand kan zowel platte tekst als een XML-document zijn; default is XML (geef -t op als de invoer platte tekst is). Het programma verwacht dat in de invoer de elementnaam "line" gebruikt wordt om een dichtregel te markeren (zoals in TEI); om een andere elementnaam op te geven kan -e gebruikt worden.
+Het bestand kan zowel platte tekst als een XML-document zijn; default is XML (geef -t op als de invoer platte tekst is). Het programma verwacht dat in de invoer de elementnaam "l" gebruikt wordt om een dichtregel te markeren (zoals in TEI); om een andere elementnaam op te geven kan -e gebruikt worden.
 
 Het patroon is optioneel en moet bestaan uit een string van nullen en enen. De defaultwaarde is "0101010101", de jambische pentameter. 
 

@@ -29,30 +29,66 @@ parser.parser.UseForeignDTD(True)
 parser.entity['nbsp'] = ' '
 
 
-# return the content of the "l" elements (as a list) from the supplied txt document
+# return the lines (as a list of pairs: (line number, line)) from the supplied txt document,
+# assuming the file contains one poem.
 def get_lines_from_txt(filename):
 
 	f = codecs.open(filename, "r", "utf-8")
-	lines = [l.rstrip() for l in f.readlines()]
+	lines = []
+	line_num = 1
+	for l in f.readlines():
+		if l.strip() == '': continue
+		lines.append([line_num, l.strip()])
+		line_num = line_num + 1
+
 	f.close()
 
         return lines
 
 
-# return the content of the line elements (as a list) from the supplied XML document
+# return the content of the line elements (as a list of pairs: (line number, line)) from 
+# the supplied XML document assuming the file contains one poem.
 def get_lines_from_xml(filename, line_elmt):
         global parser
         tree = ET.parse(filename, parser)
         root = tree.getroot()
 
         lines = []
+	line_num = 1
         for l in root.iter(line_elmt):
 		line = ""
 		for t in l.itertext():
 			line = line + t
-		lines.append(line.replace('\n', ' ').replace('\r', ''))
+		if line.strip() == '': continue
+		lines.append([line_num, line.replace('\n', ' ').replace('\r', '')])
+		line_num = line_num + 1
 
         return lines
+
+
+# return the content of the line elements (as a list of pairs: (line number, line)) from 
+# the supplied XML document
+def get_lines_from_tei(filename):
+        global parser
+        tree = ET.parse(filename, parser)
+        root = tree.getroot()
+
+	tei_poem_path = ".//lg[@type='poem']"
+	tei_line_elmt = "l"
+        lines = []
+	for p in root.iterfind(tei_poem_path):
+		line_num = 1
+        	for l in p.iter(tei_line_elmt):
+			line = ""
+			for t in l.itertext():
+				line = line + t
+			line = line.replace('\n', ' ').replace('\r', '')
+			if line.strip() == '': continue
+			lines.append([line_num, line.strip()])
+			line_num = line_num + 1
+
+        return lines
+
 
 
 
@@ -182,14 +218,11 @@ if __name__ == '__main__':
 	# iambic pentameter is default
 	default_metre = "0101010101"
 
-	# line element (in case the input is XML)
-	default_line_elmt = "l"
-
 	# cmd line parsing
 	aparser = argparse.ArgumentParser()
 	aparser.add_argument('-m', "--metre", required=False, default=default_metre, help='the metre as a string of zeroes and ones', metavar='metre')
 	aparser.add_argument('-f', "--file", required=True, help='the input file containing poetry to be scanned', metavar='filename')
-	aparser.add_argument('-e', "--element", required=False, default=default_line_elmt, help='the name of the XML element containing a line of verse', metavar='line element')
+	aparser.add_argument('-e', "--element", required=False, help='the name of the XML element containing a line of verse', metavar='line element')
 	aparser.add_argument('-t', "--text", required=False, help='assume the input is plain text', action="store_true")
 	aparser.add_argument('-d', "--debug", required=False, help='print debugging info', action="store_true")
 	
@@ -203,17 +236,24 @@ if __name__ == '__main__':
 	# initialize the module
 	stresspatterns.init()
 
+	# determine the input type
 	if args.text:
 		lines = get_lines_from_txt(filename)
-	else:
-		lines = get_lines_from_xml(filename, line_elmt)
+	else: 
+		if line_elmt:
+			lines = get_lines_from_xml(filename, line_elmt)
+		else:
+			lines = get_lines_from_tei(filename)
+
 
 	metre_num = map(int, metre)
 
 	scansion_pattern_struct = {}
 	line_struct = {}
-	for l in lines:
-		if l.strip() == '': continue
+	first_line = True
+	for l_struct in lines:
+		line_num = l_struct[0]
+		l = l_struct[1]
 		(words, pauses) = stresspatterns.get_words_from_string(l)
 		# first try regular stress patterns
 		stress_patterns = stresspatterns.get_stress_patterns(words)
@@ -240,11 +280,14 @@ if __name__ == '__main__':
 		pattern_string = "".join(str(d) for d in scansion_pattern)
 		pattern_string_poetic = "".join(str(d) for d in scansion_pattern_poetic)
 		wildcard_pattern_string = wildcard_pattern_string.replace("-1", "?")
+		if not first_line and line_num == 1:
+			print 
 		if debug:
-			print "LINE: %s --- PATTERN: %s --- CELEX PATTERN: %s --- WILDCARD PATTERN: %s" % (l.encode('utf-8'), pattern_string_final, stress_pattern_string, wildcard_pattern_string)
+			print "%d LINE: %s --- PATTERN: %s --- CELEX PATTERN: %s --- WILDCARD PATTERN: %s" % (line_num, l.encode('utf-8'), pattern_string_final, stress_pattern_string, wildcard_pattern_string)
 		else:
-			print "%s\t%s" % (l.encode('utf-8'), pattern_string_final)
+			print "%d\t%s\t%s" % (line_num, l.encode('utf-8'), pattern_string_final)
 	
+		first_line = False
 	
 	
 	
