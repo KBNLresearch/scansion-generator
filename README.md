@@ -12,7 +12,7 @@ The software consists of the following components:
 Algorithms
 ==========
 
-The meter is coded internally as a string of ones and zeroes. For any given line of verse firstly the relative weight of the syllables in the individual words is determined. There are four weight classes for syllables: heavy, light, unstressed and unknown. This stress information is determined on the basis of the Celex information in combination with the following heuristics: apply these two rules, but only if the resulting meter lies closer (in the Levenshtein sense) to the ideal pattern of meter: 
+The meter is coded internally as a string of ones and zeroes. For any given line of verse firstly the relative weight of the syllables in the individual words is determined. There are four weight classes for syllables: heavy, light, unstressed and unknown. This stress information is determined on the basis of the Celex information in combination with the following heuristics: apply these two rules, but only if the resulting meter lies closer (in the [Levenshtein](http://en.wikipedia.org/wiki/Levenshtein_distance) sense) to the ideal pattern of meter: 
 
 + by means of an apostrophe left out syllables do not count;
 + if a word ends in a vowel, while its follow-up starts with a consonant, then these two syllables are seen as one syllable with the stress on the highest weighted syllable of the two syllables involved.
@@ -24,4 +24,4 @@ With this information of stress per word we do not have the meter yet, among oth
 
 After this revision, the meter is still not finalized. From the remaining possible meters the meter is chosen that lies closest (in the Levenshtein sense) to the target pattern. 
 
-A Dutch version of this documentation can be found in README.txt.
+A Dutch version of this documentation can be found in [README.txt](https://github.com/KBNLresearch/scansion-generator/blob/master/README.txt).
