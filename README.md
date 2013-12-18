@@ -1,13 +1,13 @@
 What is this about?
 ===================
 
-This software is used to automatically determine the stress pattern of a line in verse. The input is a file and a pattern of meter (coded in binary). Output (after standard output) is an overview of the lines of the input poem with its stress pattern after each line. 
+This software is used to automatically determine the stress pattern of a line in verse. The input is a file and a pattern of meter (coded in binary). Output (after standard output) is an overview of the lines of the input poem with its stress pattern after each line. The [Celex](http://celex.mpi.nl/) data is used for determining the accent information. 
 
 The software consists of the following components:
 
-+ scansion.py: the command-line interface and the more high-level code;
-+ stresspatterns.py: module to determine the accent in a line of verse on the basis of the accent information from the Celex-data
-+ dpw.cd: the Celex file with accent information for a large number of modern Dutch words
++ [scansion.py](https://github.com/KBNLresearch/scansion-generator/blob/master/scansion.py): the command-line interface and the more high-level code;
++ [stresspatterns.py](https://github.com/KBNLresearch/scansion-generator/blob/master/stresspatterns.py): module to determine the accent in a line of verse on the basis of the accent information from the Celex-data
++ [dpw.cd](https://github.com/KBNLresearch/scansion-generator/blob/master/dpw.cd): the Celex file with accent information for a large number of modern Dutch words
 
 Algorithms
 ==========
