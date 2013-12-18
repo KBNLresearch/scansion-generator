@@ -1,7 +1,7 @@
 What is this about?
 ===================
 
-This software is used to automatically determine the stress pattern of a line in verse. The input is a file and a pattern of meter (coded in binary). Output (after standard output) is an overview of the lines of the input poem with its stress pattern after each line. The [Celex](http://celex.mpi.nl/) data is used for determining the accent information. 
+This software is used to automatically determine the stress pattern of a line in verse. The input is a (plain text or TEI-XML) file and a pattern of meter (coded in binary). Output (to STDOUT) is an overview of the lines of the input poem with its stress pattern after each line. The [Celex](http://celex.mpi.nl/) data is used for determining the accent information. 
 
 The software consists of the following components:
 
